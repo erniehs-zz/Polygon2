@@ -1,0 +1,28 @@
+{
+  "name": "lib-poly2",
+  "version": "1.0.0",
+  "description": "polygon library",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erniehs/Polygon2.git"
+  },
+  "keywords": [
+    "polygon",
+    "vector"
+  ],
+  "author": "Ernie <ernie_hs@hotmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/erniehs/Polygon2/issues"
+  },
+  "homepage": "https://github.com/erniehs/Polygon2#readme",
+  "devDependencies": {
+    "lib-vec2": "^2.2.0",
+    "chai": "^4.1.0",
+    "mocha": "^3.4.2"
+  }
+}
