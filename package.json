@@ -20,8 +20,11 @@
     "url": "https://github.com/erniehs/Polygon2/issues"
   },
   "homepage": "https://github.com/erniehs/Polygon2#readme",
+  "dependencies": {
+    "lib-math2": "^1.0.0",
+    "lib-vec2": "^2.2.0"
+  },
   "devDependencies": {
-    "lib-vec2": "^2.2.0",
     "chai": "^4.1.0",
     "mocha": "^3.4.2"
   }

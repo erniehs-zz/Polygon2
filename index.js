@@ -1,6 +1,7 @@
 "use strict";
 
 var Vec2 = require("lib-vec2").Vec2;
+var Math2 = require("lib-math2").Math2;
 
 class ABox2 {
   constructor(tl, br) {
@@ -11,10 +12,14 @@ class ABox2 {
   static withABox2(b) {
     return new ABox2(Vec2.withVec2(b.tl), Vec2.withVec2(b.br));
   }
-
+  
   area() {
     var a = this.br.sub(this.tl);
     return Math.abs(a.x * a.y);
+  }
+
+  intersects(b) {
+    return Math2.between(this.tl.x, b.tl.x, b.br.x) && Math2.between(this.tl.y, b.tl.y, b.br.y);
   }
 }
 
