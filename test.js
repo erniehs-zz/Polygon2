@@ -37,14 +37,17 @@ describe("ABox2 is an axis aligned box", function() {
   });
   describe("ABox2 can test for intersection of another Abox2", function() {
     it("can test for intersection", function() {
-      var b1 = new ABox2(new Vec2(0, 0), new Vec2(10, 10));
-      var b2 = new ABox2(new Vec2(-10, -10), new Vec2(0, 0));
-      expect(b1.intersects(b2)).to.be.true;
+      var box = new ABox2(new Vec2(0, 0), new Vec2(10, 10));
+      var boxes = [new ABox2(new Vec2(-10, -10), new Vec2(0, 0)),
+        new ABox2(new Vec2(0, -10), new Vec2(10, 0)),
+        new ABox2(new Vec2(10, -10), new Vec2(20, 0))
+      ];
+      boxes.forEach(b => expect(box.intersects(b)).to.be.true);
     });
     it("can test for non-intersection", function() {
-      var b1 = new ABox2(new Vec2(0, 0), new Vec2(10, 10));
-      var b2 = new ABox2(new Vec2(-10, -10), new Vec2(-0.1, -0.1));
-      expect(b1.intersects(b2)).to.be.false;
+      var box = new ABox2(new Vec2(0, 0), new Vec2(10, 10));
+      var boxes = [new ABox2(new Vec2(-10, -10), new Vec2(-0.1, -0.1))];
+      boxes.forEach(b => expect(box.intersects(b)).to.be.false);
     });
   });
 });
