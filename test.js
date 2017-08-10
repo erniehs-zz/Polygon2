@@ -50,53 +50,66 @@ describe("ABox2 is an axis aligned box", function() {
       boxes.forEach(b => expect(box.intersects(b)).to.be.false);
     });
   });
-});
+  describe("ABox2 can generate a quad, or chop itself into 4 boxes", function() {
+    it("can generate a quad", function() {
+      var box = new ABox2(new Vec2(0, 0), new Vec2(10, 10));
+      var quad = box.quad();
+      var tQuad = [new ABox2(new Vec2(0, 0), new Vec2(5, 5)),
+        new ABox2(new Vec2(5, 0), new Vec2(10, 5)),
+        new ABox2(new Vec2(0, 5), new Vec2(5, 10)),
+        new ABox2(new Vec2(5, 5), new Vec2(10, 10))];
+        expect(quad).not.to.be.undefined;
+        expect(quad.length).to.equal(4);
+        expect(quad).to.deep.equal(tQuad);
+      });
+    });
+  });
 
-describe("Polygon2 is a collection of Vec2's", function() {
-  describe("Polygon2 can be constructed", function() {
-    it("can be constructed with an array of vectors", function() {
-      var vectors = [new Vec2(1, 2), new Vec2(3, 4), new Vec2(5, 5)];
-      var p = new Polygon2(vectors);
-      expect(p.vectors).to.deep.equal(vectors);
-      vectors[0].x = 99;
-      expect(vectors[0].x).to.equal(99);
-      expect(p.vectors[0].x).to.equal(1);
+  describe("Polygon2 is a collection of Vec2's", function() {
+    describe("Polygon2 can be constructed", function() {
+      it("can be constructed with an array of vectors", function() {
+        var vectors = [new Vec2(1, 2), new Vec2(3, 4), new Vec2(5, 5)];
+        var p = new Polygon2(vectors);
+        expect(p.vectors).to.deep.equal(vectors);
+        vectors[0].x = 99;
+        expect(vectors[0].x).to.equal(99);
+        expect(p.vectors[0].x).to.equal(1);
+      });
+      it("can be constructed with another polygon", function() {
+        var vectors = [new Vec2(1, 2), new Vec2(3, 4), new Vec2(5, 5)];
+        var p1 = new Polygon2(vectors);
+        var p2 = Polygon2.withPolygon2(p1);
+        expect(p1.vectors).to.deep.equal(p2.vectors);
+        vectors[0].x = 99;
+        p1.vectors[0].x = 66;
+        expect(vectors[0].x).to.equal(99);
+        expect(p1.vectors[0].x).to.equal(66);
+        expect(p2.vectors[0].x).to.equal(1);
+      });
     });
-    it("can be constructed with another polygon", function() {
-      var vectors = [new Vec2(1, 2), new Vec2(3, 4), new Vec2(5, 5)];
-      var p1 = new Polygon2(vectors);
-      var p2 = Polygon2.withPolygon2(p1);
-      expect(p1.vectors).to.deep.equal(p2.vectors);
-      vectors[0].x = 99;
-      p1.vectors[0].x = 66;
-      expect(vectors[0].x).to.equal(99);
-      expect(p1.vectors[0].x).to.equal(66);
-      expect(p2.vectors[0].x).to.equal(1);
+    describe("Polygon2 can be transformed", function() {
+      it("can be transformed with an affine transform matrix", function() {
+        var t = MatA.translate(new Vec2(10, 10));
+        var vectors = [new Vec2(1, 2), new Vec2(3, 4), new Vec2(5, 5)];
+        var p = new Polygon2(vectors);
+        var p1 = p.affineTransform(t);
+        expect(p1.vectors[0].x).to.equal(11);
+        expect(p1.vectors[0].y).to.equal(12);
+        expect(p1.vectors[1].x).to.equal(13);
+        expect(p1.vectors[1].y).to.equal(14);
+        expect(p1.vectors[2].x).to.equal(15);
+        expect(p1.vectors[2].y).to.equal(15);
+      });
+    });
+    describe("Polygon2 can calculate an axis aligned bounding box", function() {
+      it("can construct an axis aligned bounding box", function() {
+        var vectors = [new Vec2(1, 20), new Vec2(3, 4), new Vec2(5, 15)];
+        var p1 = new Polygon2(vectors);
+        var b = p1.axisAlignedBox();
+        expect(b.tl.x).to.equal(1);
+        expect(b.tl.y).to.equal(4);
+        expect(b.br.x).to.equal(5);
+        expect(b.br.y).to.equal(20);
+      });
     });
   });
-  describe("Polygon2 can be transformed", function() {
-    it("can be transformed with an affine transform matrix", function() {
-      var t = MatA.translate(new Vec2(10, 10));
-      var vectors = [new Vec2(1, 2), new Vec2(3, 4), new Vec2(5, 5)];
-      var p = new Polygon2(vectors);
-      var p1 = p.affineTransform(t);
-      expect(p1.vectors[0].x).to.equal(11);
-      expect(p1.vectors[0].y).to.equal(12);
-      expect(p1.vectors[1].x).to.equal(13);
-      expect(p1.vectors[1].y).to.equal(14);
-      expect(p1.vectors[2].x).to.equal(15);
-      expect(p1.vectors[2].y).to.equal(15);
-    });
-  });
-  describe("Polygon2 can calculate an axis aligned bounding box", function() {
-    it("can construct an axis aligned bounding box", function() {
-      var vectors = [new Vec2(1, 20), new Vec2(3, 4), new Vec2(5, 15)];
-      var p1 = new Polygon2(vectors);
-      var b = p1.axisAlignedBox();
-      expect(b.tl.x).to.equal(1);
-      expect(b.tl.y).to.equal(4);
-      expect(b.br.x).to.equal(5);
-      expect(b.br.y).to.equal(20);
-    });
-  });
-});

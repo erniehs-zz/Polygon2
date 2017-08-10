@@ -13,6 +13,18 @@ class ABox2 {
     return new ABox2(Vec2.withVec2(b.tl), Vec2.withVec2(b.br));
   }
 
+  static withVec2s(vectors) {
+    var min = new Vec2(Number.MAX_VALUE, Number.MAX_VALUE);
+    var max = new Vec2(Number.MIN_VALUE, Number.MIN_VALUE);
+    for(var i in vectors) {
+      min.x = Math.min(min.x, vectors[i].x);
+      min.y = Math.min(min.y, vectors[i].y);
+      max.x = Math.max(max.x, vectors[i].x);
+      max.y = Math.max(max.y, vectors[i].y);
+    }
+    return new ABox2(min, max);
+  }
+
   area() {
     var a = this.br.sub(this.tl);
     return Math.abs(a.x * a.y);
@@ -21,6 +33,14 @@ class ABox2 {
   intersects(b) {
     return (Math2.between(this.tl.x, b.tl.x, b.br.x) || Math2.between(this.br.x, b.tl.x, b.br.x)) &&
       (Math2.between(this.tl.y, b.tl.y, b.br.y) || Math2.between(this.br.y, b.tl.y, b.br.y));
+  }
+
+  quad() {
+    var m = this.tl.add(this.br.sub(this.tl).div(2));
+    return [new ABox2(Vec2.withVec2(this.tl), Vec2.withVec2(m)),
+      new ABox2(new Vec2(m.x, this.tl.y), new Vec2(this.br.x, m.y)),
+      new ABox2(new Vec2(this.tl.x, m.y), new Vec2(m.x, this.br.y)),
+      new ABox2(Vec2.withVec2(m), Vec2.withVec2(this.br))];
   }
 }
 
@@ -38,15 +58,7 @@ class Polygon2 {
   }
 
   axisAlignedBox() {
-    var min = new Vec2(Number.MAX_VALUE, Number.MAX_VALUE);
-    var max = new Vec2(Number.MIN_VALUE, Number.MIN_VALUE);
-    for(var i in this.vectors) {
-      min.x = Math.min(min.x, this.vectors[i].x);
-      min.y = Math.min(min.y, this.vectors[i].y);
-      max.x = Math.max(max.x, this.vectors[i].x);
-      max.y = Math.max(max.y, this.vectors[i].y);
-    }
-    return new ABox2(min, max);
+    return ABox2.withVec2s(this.vectors);
   }
 }
 
